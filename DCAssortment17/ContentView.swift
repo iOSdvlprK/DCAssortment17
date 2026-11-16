@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var isTapped = false
+    
     var body: some View {
         ZStack {
             Image(.image1)
@@ -53,8 +55,10 @@ struct ContentView: View {
                 HStack {
                     HStack {
                         Image(systemName: "ellipsis")
+                            .symbolEffect(.pulse)
                         Divider()
                         Image(systemName: "sparkle.magnifyingglass")
+                            .symbolEffect(.wiggle.byLayer, options: .repeat(.periodic(delay: 1.0)))
                         Divider()
                         Image(systemName: "face.smiling")
                     }
@@ -87,9 +91,35 @@ struct ContentView: View {
             .clipShape(RoundedRectangle(cornerRadius: 20.0))
             .padding(20)
             .offset(y: 80)
+            
+            HStack(spacing: 30) {
+                Image(systemName: "wand.and.rays")
+                    .frame(width: 44)
+                    .symbolEffect(.variableColor.iterative.reversing, options: .speed(3))
+                    .symbolEffect(.bounce, value: isTapped)
+                Image(systemName: isTapped ? "pause.fill" : "play.fill")
+                    .frame(width: 44)
+                    .contentTransition(.symbolEffect(.replace))
+                    .onTapGesture {
+                        isTapped.toggle()
+                    }
+                Image(systemName: "bell.and.waves.left.and.right.fill")
+                    .frame(width: 44)
+                    .symbolEffect(.bounce, options: .speed(3).repeat(3), value: isTapped)
+            }
+            .foregroundStyle(.primary, .white)
+            .font(.largeTitle)
+            .padding(20)
+            .background(.ultraThinMaterial)
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .strokeBorder(linearGradient)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .offset(y: -44)
         }
-        .padding(20)
         .frame(maxWidth: 400)
+        .padding(20)
         .dynamicTypeSize(.xSmall ... .xxLarge)
     }
     
