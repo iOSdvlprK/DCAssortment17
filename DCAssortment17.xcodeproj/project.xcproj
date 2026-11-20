@@ -11,8 +11,13 @@
     ],
   },
   "files": [
-    { "kind": "folder", "path": "DCAssortment17", "target-membership": [ "DCAssortment17" ] },
     {
+      "kind": "folder",
+      "path": "DCAssortment17",
+      "target-membership": [
+        "DCAssortment17",
+      ],
+    }, {
       "kind": "group",
       "name": "Products",
       "children": [
