@@ -21,6 +21,9 @@ struct ContentView: View {
     @State private var hasNoise = false
     @State private var hasEmboss = false
     @State private var isPixellated = false
+    @State private var number: Float = 0
+    let numberTimer = Timer.publish(every: 0.1, on: RunLoop.main, in: RunLoop.Mode.common).autoconnect()
+    @State private var isIncrementing = true
     
     struct AnimationValues {
         var position = CGPoint(x: 0, y: 0)
@@ -53,8 +56,21 @@ struct ContentView: View {
                             .blendMode(.overlay)
                             .opacity(hasNoise ? 1 : 0)
                     )
-                    .layerEffect(ShaderLibrary.emboss(.float(1)), maxSampleOffset: .zero, isEnabled: hasEmboss)
-                    .layerEffect(ShaderLibrary.pixellate(.float(10)), maxSampleOffset: .zero, isEnabled: isPixellated)
+                    .layerEffect(ShaderLibrary.emboss(.float(number)), maxSampleOffset: .zero, isEnabled: hasEmboss)
+                    .layerEffect(ShaderLibrary.pixellate(.float(number)), maxSampleOffset: .zero, isEnabled: isPixellated)
+                    .onReceive(numberTimer, perform: { _ in
+                        if isIncrementing {
+                            number += 1
+                        } else {
+                            number -= 1
+                        }
+                        if number >= 10 {
+                            isIncrementing = false
+                        }
+                        if number <= 0 {
+                            isIncrementing = true
+                        }
+                    })
                     .distortionEffect(ShaderLibrary.simpleWave(.float(startDate.timeIntervalSinceNow)), maxSampleOffset: CGSize(width: 100, height: 100), isEnabled: hasSimpleWave)
                     .visualEffect { [hasComplexWave] content, proxy in
                         content.distortionEffect(ShaderLibrary.complexWave(
@@ -105,7 +121,7 @@ struct ContentView: View {
 
             content
                 .padding(20.0)
-                .background(.regularMaterial)
+                .background(hasSimpleWave || hasComplexWave ? AnyView(Color(.secondarySystemBackground)) : AnyView(Color.clear.background(.regularMaterial)))
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
                         .strokeBorder(linearGradient)
@@ -116,17 +132,19 @@ struct ContentView: View {
             
             play
                 .frame(width: isTapped ? 220 : 50)
-                .foregroundStyle(
-                    ShaderLibrary.angledFill(
-                        .float(10),
-                        .float(10),
-                        .color(.blue)
+                .if(hasPattern) { view in
+                    view.foregroundStyle(
+                        ShaderLibrary.angledFill(
+                            .float(10),
+                            .float(10),
+                            .color(.blue)
+                        )
                     )
-                )
+                }
                 .foregroundStyle(.primary, .white)
                 .font(.largeTitle)
                 .padding(20)
-                .background(.ultraThinMaterial)
+                .background(hasSimpleWave || hasComplexWave ? AnyView(Color(.secondarySystemBackground)) : AnyView(Color.clear.background(.ultraThinMaterial)))
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
                         .strokeBorder(linearGradient)
