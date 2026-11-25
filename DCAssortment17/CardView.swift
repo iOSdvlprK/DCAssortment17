@@ -121,7 +121,14 @@ struct CardView: View {
 
             content
                 .padding(20.0)
-                .background(hasSimpleWave || hasComplexWave ? AnyView(Color(.secondarySystemBackground)) : AnyView(Color.clear.background(.regularMaterial)))
+                .background {
+                    Color(.secondarySystemBackground)
+                        .overlay {
+                            if !hasSimpleWave && !hasComplexWave {
+                                Rectangle().fill(.regularMaterial)
+                            }
+                        }
+                }
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
                         .strokeBorder(linearGradient)
@@ -144,7 +151,14 @@ struct CardView: View {
                 .foregroundStyle(.primary, .white)
                 .font(.largeTitle)
                 .padding(20)
-                .background(hasSimpleWave || hasComplexWave ? AnyView(Color(.secondarySystemBackground)) : AnyView(Color.clear.background(.ultraThinMaterial)))
+                .background {
+                    Color(.secondarySystemBackground)
+                        .overlay {
+                            if !hasSimpleWave && !hasComplexWave {
+                                Rectangle().fill(.ultraThinMaterial)
+                            }
+                        }
+                }
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
                         .strokeBorder(linearGradient)
