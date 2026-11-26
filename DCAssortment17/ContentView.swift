@@ -12,8 +12,8 @@ struct ContentView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 60) {
-                ForEach(0 ..< 5) { item in
-                    CardView()
+                ForEach(cards) { card in
+                    CardView(card: card)
                         .scrollTransition { content, phase in
                             content
                                 .scaleEffect(phase.isIdentity ? 1 : 0.8)
