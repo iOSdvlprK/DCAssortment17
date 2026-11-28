@@ -35,7 +35,7 @@ struct CardView: View {
     var body: some View {
         TimelineView(.animation) { context in
             layout
-                .frame(maxWidth: 400)
+                .frame(maxWidth: 393)
                 .dynamicTypeSize(.xSmall ... .xxLarge)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(.vertical, 10)
@@ -49,7 +49,7 @@ struct CardView: View {
                 card.image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(height: isTapped ? 600 : 300)
+                    .frame(height: isTapped ? 600 : 500)
                     .frame(width: isTapped ? 402 : 360)
                     .if(hasPattern, transform: { view in
                         view
